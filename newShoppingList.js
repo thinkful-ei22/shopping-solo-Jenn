@@ -39,7 +39,7 @@ function renderShoppingList(filter) {
   let items = STORE;
   //if a filter is present in render shopping list, it will run with the filter, if not, it will render normally
   if (filter){
-    items=items.filter(item =>{
+    items=items.filter(item =>{  //this is specific to the search filter, change so this can take in any filter?
       //if the item in STORE includes the filter (our search term), render that item
       if (item.name.toLowerCase().includes(filter)){
         return item;
@@ -141,26 +141,21 @@ function getItemIndexFromOutsideElement(item){
     .find('.js-item-index-element')
   // //get the item index from the data in the li element
     .attr('data-item-index');
-   //convert the number string into a number
+  //convert the number string into a number
   return parseInt(itemIndexString, 10);
   
 }
 //LOST IN THE SAUCE WITH THIS FUNCTION.  BASICALLY, I WANT TO TAKE ALL ITEMS WHOSE PROPERTY "SELECTED"===FALSE AND TOGGLE THE CLASS .HIDDEN 
-//function filterList(){
-//   $('#js-shopping-list-filter').submit(function(event){
-//     event.preventDefault();
-//     const itemIndex = getItemIndexFromOutsideElement(event.currentTarget);  I USED THIS FUNCTION TO GET THE ITEM INDEX
-//     const item =STORE[itemIndex];  THIS IS WHERE I'M GETTING STUCK...
-//     const checkedItems = STORE.filter(item =>{
-//    return item.selected===false;})
-//     toggleDisplayItem(itemIndex);
-//     }}
-//   });
-// }
+$('#js-shopping-list-filter').submit(function(event){
+  event.preventDefault();
+  const itemIndex = getItemIndexFromOutsideElement(event.currentTarget);  
+const item =STORE[itemIndex];
+  const checkedItems = STORE.filter(item =>{
+ return item.selected===true;});
+  })
+ //need to figure out how to render the new list 
+}
 
-///when the "new list" button is clicked...
-//iterate through STORE and filter all items with selected===true
-//display those items
 
 function handleSearches(){
   $('#js-shopping-list-search').submit(function(event){
