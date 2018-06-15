@@ -6,7 +6,7 @@ body {
   font-family: 'Roboto', sans-serif;
 }
 
-button, input[type="text"] {
+button, input, search[type="text"] {
   padding: 5px;
 }
 
@@ -44,4 +44,8 @@ button:hover {
 
 .shopping-item__checked {
   text-decoration: line-through;
+}
+
+.hidden-item{
+  display: none;
 }
