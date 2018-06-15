@@ -145,16 +145,18 @@ function getItemIndexFromOutsideElement(item){
   return parseInt(itemIndexString, 10);
   
 }
-function filterList(){
-  $('#js-shopping-list-filter').submit(function(event){
-    event.preventDefault();
-    const itemIndex = getItemIndexFromOutsideElement(event.currentTarget);
-    console.log(itemIndex);
-    if (STORE[itemIndex].selected===false){
-      toggleDisplayItem(itemIndex);
-    }
-  });
-}
+//LOST IN THE SAUCE WITH THIS FUNCTION.  BASICALLY, I WANT TO TAKE ALL ITEMS WHOSE PROPERTY "SELECTED"===FALSE AND TOGGLE THE CLASS .HIDDEN 
+//function filterList(){
+//   $('#js-shopping-list-filter').submit(function(event){
+//     event.preventDefault();
+//     const itemIndex = getItemIndexFromOutsideElement(event.currentTarget);  I USED THIS FUNCTION TO GET THE ITEM INDEX
+//     const item =STORE[itemIndex];  THIS IS WHERE I'M GETTING STUCK...
+//     const checkedItems = STORE.filter(item =>{
+//    return item.selected===false;})
+//     toggleDisplayItem(itemIndex);
+//     }}
+//   });
+// }
 
 ///when the "new list" button is clicked...
 //iterate through STORE and filter all items with selected===true
