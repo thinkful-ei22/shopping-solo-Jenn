@@ -5,7 +5,7 @@ function generateItemElement(item, itemIndex){//use the index from the STORE and
   const boxChecked = item.selected ? 'checked' : ''; //use the checked data in an if statement to assign the li element a class
   const completed = item.checked ? 'shopping-item__checked' : ''; //use the selected data in an if statement to assign the li element a class
   return `
-  <li class="js-item-index-element ${itemShown}" data-item-index="${itemIndex}"> 
+  <li class="js-item-index-element" data-item-index="${itemIndex}"> 
     <span class="shopping-item js-shopping-item ${completed}">
     ${item.name}</span>
     <div class="shopping-item-controls">
@@ -25,7 +25,7 @@ function generateShoppingItemsString(shoppingList){//loop through the STORE and 
   return items.join('');
 }
 function renderShoppingList() {
-  const shoppingListItemsString = generateShoppingItemsString(items);//assign the string created with generateShoppingItemsString to a variable
+  const shoppingListItemsString = generateShoppingItemsString();//assign the string created with generateShoppingItemsString to a variable
   $('.shopping-list').html(shoppingListItemsString);//add the string to the ul element with the shopping-list class
 }
 function addItem(itemName){//add the new item as an object in the store array
@@ -80,12 +80,12 @@ function getItemIndexFromOutsideElement(item){
   return parseInt(itemIndexString, 10);//convert the number string into a number 
 }
 function filterList(){
-$('#js-shopping-list-filter').submit(function(event){//when "new list" button is clicked
-  event.preventDefault();//prevent default behavior
-  const checkedItems = STORE.filter(item =>{//filter the store so that only items that are checked are in "checked items"
-  return item.selected===true;});
-  renderShoppingList(checkedItems); //render the shopping list with checked items
-  })
+  $('#js-shopping-list-filter').submit(function(event){//when "new list" button is clicked
+    event.preventDefault();//prevent default behavior
+    const checkedItems = STORE.filter(item =>{//filter the store so that only items that are checked are in "checked items"
+      return item.selected===true;});
+    renderShoppingList(checkedItems); //render the shopping list with checked items
+  });
 }
 function handleSearches(){
   $('#js-shopping-list-search').submit(function(event){//when search is clicked...
@@ -94,9 +94,9 @@ function handleSearches(){
     const searchMatches = STORE.filter(item =>{ //filter only items that include the search term
       if (item.name.toLowerCase().includes(searchTerm)){
         return item;}
-    renderShoppingList(searchMatches);//render only search matches
-  });
-}
+      renderShoppingList(searchMatches);//render only search matches
+    });
+  });}
 // User can edit the title of an item
 //add an edit button to the li template
 //when user clicks on the edit button, an input should appear
