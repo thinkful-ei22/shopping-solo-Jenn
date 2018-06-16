@@ -1,16 +1,11 @@
 'use strict';
-const STORE = [
+const STORE = [//store all data here instead of the DOM
 ];
-
-function generateItemElement(item, itemIndex){//do we need the 'template' since its not used?
-//use the index from the STORE and assign it in the li element
-//use the checked data in an if statement to assign the li element a class
-//print out the li element as a strin
-  const boxChecked = item.selected ? 'checked' : '';
-  const itemShown = item.displayed ? '' : 'hidden-item';
-  const completed = item.checked ? 'shopping-item__checked' : '';
+function generateItemElement(item, itemIndex){//use the index from the STORE and assign it in the li element
+  const boxChecked = item.selected ? 'checked' : ''; //use the checked data in an if statement to assign the li element a class
+  const completed = item.checked ? 'shopping-item__checked' : ''; //use the selected data in an if statement to assign the li element a class
   return `
-  <li class="js-item-index-element ${itemShown}" data-item-index="${itemIndex}">
+  <li class="js-item-index-element ${itemShown}" data-item-index="${itemIndex}"> 
     <span class="shopping-item js-shopping-item ${completed}">
     ${item.name}</span>
     <div class="shopping-item-controls">
@@ -22,149 +17,84 @@ function generateItemElement(item, itemIndex){//do we need the 'template' since 
           <span class="button-label">delete</span>
       </button>
     </div>
-  </li>`;
+  </li>`;//print out the li element as a string
 }
-
-function generateShoppingItemsString(shoppingList){
-//loop through the STORE and for every item in the store, generate an
-//li element using generateItemElemens
-  const items = shoppingList.map((item, index) => 
-  //since the product will be an array, need to join to one big string to
-  //put in the DOM
+function generateShoppingItemsString(shoppingList){//loop through the STORE and for every item in the store, generate an li element using generateItemElemens
+  const items = shoppingList.map((item, index) => //since the product will be an array, need to join to one big string to put in the DOM
     generateItemElement(item, index));
   return items.join('');
 }
-
-function renderShoppingList(filter) {
-  let items = STORE;
-  //if a filter is present in render shopping list, it will run with the filter, if not, it will render normally
-  if (filter){
-    items=items.filter(item =>{  //this is specific to the search filter, change so this can take in any filter?
-      //if the item in STORE includes the filter (our search term), render that item
-      if (item.name.toLowerCase().includes(filter)){
-        return item;
-      }
-    });
-  }
-  //assign the string created with generateShoppingItemsString to a variable
-  const shoppingListItemsString = generateShoppingItemsString(items);
-  //add the string to the ul element with the shopping-list class
-  $('.shopping-list').html(shoppingListItemsString);
+function renderShoppingList() {
+  const shoppingListItemsString = generateShoppingItemsString(items);//assign the string created with generateShoppingItemsString to a variable
+  $('.shopping-list').html(shoppingListItemsString);//add the string to the ul element with the shopping-list class
 }
-function addItem(itemName){
-//add the new item as an object in the store array
-  STORE.push({name: itemName, checked: false, selected: false, displayed: true});
+function addItem(itemName){//add the new item as an object in the store array
+  STORE.push({name: itemName, checked: false, selected: false});
 }
-
 function handleNewItemSubmit(){
-//when the user clicks "add item" button...
-  $('#js-shopping-list-form').submit(function(event){
-    //prevent default behavior
-    event.preventDefault();
-    //make a new variable using the value of the text the user entered
-    const newItemName = $('.js-shopping-list-entry').val();
-    //add it using the addItem function
-    addItem(newItemName);
-    //render the updated list
-    renderShoppingList();
+  $('#js-shopping-list-form').submit(function(event){//when the user clicks "add item" button...
+    event.preventDefault();//prevent default behavior
+    const newItemName = $('.js-shopping-list-entry').val();//make a new variable using the value of the text the user entered
+    addItem(newItemName); //add it using the addItem function
+    renderShoppingList();//render the updated list
   });
 }
-
 function toggleCheckedForListItem(itemIndex){
-  //change the checked property to the opposite (true to false etc)
-  STORE[itemIndex].checked = !STORE[itemIndex].checked;
+  STORE[itemIndex].checked = !STORE[itemIndex].checked;  //change the checked property to the opposite (true to false etc)
 }
-
-//figure out what the index of an item is
-function getItemIndexFromElement(item){
-  const itemIndexString = $(item)
-  //find the nearest li with this class
+function getItemIndexFromElement(item){//figure out what the index of an item is
+  const itemIndexString = $(item)//find the nearest li with this class
     .closest('.js-item-index-element')
-  //get the item index from the data in the li element
-    .attr('data-item-index');
-  //convert the number string into a number
-  return parseInt(itemIndexString, 10);
+    .attr('data-item-index');//get the item index from the data in the li element
+  return parseInt(itemIndexString, 10);  //convert the number string into a number
 }
-//mark item as complete
 function checkOff(){
-//when check is clicked...
-  $('.shopping-list').on('click','.shopping-item-toggle',(function(event){
+  $('.shopping-list').on('click','.shopping-item-toggle',(function(event){//when check is clicked...
     event.preventDefault();
-    //assign the index of the current list item to a variable
-    const itemIndex = getItemIndexFromElement(event.currentTarget);
-    //go into the STORE and toggle the checked property for the item at this index
-    toggleCheckedForListItem(itemIndex);
-    //render updated list
-    renderShoppingList();
+    const itemIndex = getItemIndexFromElement(event.currentTarget);//assign the index of the current list item to a variable
+    toggleCheckedForListItem(itemIndex);//go into the STORE and toggle the checked property for the item at this index
+    renderShoppingList(); //render updated list
   }));
 }
-//delete item
 function removeItem(){
-  //when delete is clicked
-  $('.shopping-list').on('click', '.js-item-delete', event => {
-  //assign the index of the current list item to a variable
-    const itemIndex = getItemIndexFromElement(event.currentTarget);
-
-    //delete the current item from the store
-    delete STORE[itemIndex];
-    //render updated list
-    renderShoppingList();
+  $('.shopping-list').on('click', '.js-item-delete', event => {//when delete is clicked
+    const itemIndex = getItemIndexFromElement(event.currentTarget); //assign the index of the current list item to a variable
+    delete STORE[itemIndex]; //delete the current item from the store
+    renderShoppingList();//render updated list
   });
 }
-
-//toggle that class in a similar way to the checked/unchecked class
 function toggleSelectedForListItem(itemIndex){
-  //change the selected property to the opposite (true to false etc)
-  STORE[itemIndex].selected = !STORE[itemIndex].selected;
+  STORE[itemIndex].selected = !STORE[itemIndex].selected; //change the selected property to the opposite (true to false etc)
 }
-//change the list to reflect the check
 function selectItem(){
-  //when check is clicked...
-  $('.shopping-list').on('click','#checkBox',(function(event){
-    //assign the index of the current list item to a variable
-    const itemIndex = getItemIndexFromElement(event.currentTarget);
-    //go into the STORE and toggle the checked property for the item at this index
-    toggleSelectedForListItem(itemIndex);
-    //render updated list
-    renderShoppingList();
+  $('.shopping-list').on('click','#checkBox',(function(event){//when check box is clicked...
+    const itemIndex = getItemIndexFromElement(event.currentTarget); //assign the index of the current list item to a variable
+    toggleSelectedForListItem(itemIndex); //go into the STORE and toggle the selected property for the item at this index
+    renderShoppingList(); //render updated list
   }));
 }
-function toggleDisplayItem(itemIndex){
-  //change the checked property to the opposite (true to false etc)
-  STORE[itemIndex].displayed = !STORE[itemIndex].displayed;
-}
-
 function getItemIndexFromOutsideElement(item){
   const itemIndexString = $(item)
-  //find the nearest li with this class
-    .next()
-    .find('.js-item-index-element')
-  // //get the item index from the data in the li element
-    .attr('data-item-index');
-  //convert the number string into a number
-  return parseInt(itemIndexString, 10);
-  
+    .next().find('.js-item-index-element')//find the nearest li with this class
+    .attr('data-item-index'); //get the item index from the data in the li element
+  return parseInt(itemIndexString, 10);//convert the number string into a number 
 }
-//LOST IN THE SAUCE WITH THIS FUNCTION.  BASICALLY, I WANT TO TAKE ALL ITEMS WHOSE PROPERTY "SELECTED"===FALSE AND TOGGLE THE CLASS .HIDDEN 
-$('#js-shopping-list-filter').submit(function(event){
-  event.preventDefault();
-  const itemIndex = getItemIndexFromOutsideElement(event.currentTarget);  
-const item =STORE[itemIndex];
-  const checkedItems = STORE.filter(item =>{
- return item.selected===true;});
+function filterList(){
+$('#js-shopping-list-filter').submit(function(event){//when "new list" button is clicked
+  event.preventDefault();//prevent default behavior
+  const checkedItems = STORE.filter(item =>{//filter the store so that only items that are checked are in "checked items"
+  return item.selected===true;});
+  renderShoppingList(checkedItems); //render the shopping list with checked items
   })
- //need to figure out how to render the new list 
 }
-
-
 function handleSearches(){
-  $('#js-shopping-list-search').submit(function(event){
-    //prevent default behavior
-    event.preventDefault();
-    //get value of what the user inputs
-    const searchTerm = $('#mySearch').val();
-    //this will make the render function run our filter
-    renderShoppingList(searchTerm.toLowerCase());
+  $('#js-shopping-list-search').submit(function(event){//when search is clicked...
+    event.preventDefault();//prevent default behavior
+    const searchTerm = $('#mySearch').val().toLowerCase(); //get value of what the user inputs
+    const searchMatches = STORE.filter(item =>{ //filter only items that include the search term
+      if (item.name.toLowerCase().includes(searchTerm)){
+        return item;}
+    renderShoppingList(searchMatches);//render only search matches
   });
 }
 // User can edit the title of an item
